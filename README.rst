@@ -27,8 +27,8 @@ Overview
     :alt: Coverage Status
     :target: https://codecov.io/github/milescsmith/mass_cytometry_reduction
 
-.. |codacy| image:: https://img.shields.io/codacy/grade/[Get ID from https://app.codacy.com/app/milescsmith/mass_cytometry_reduction/settings].svg
-    :target: https://www.codacy.com/app/milescsmith/mass_cytometry_reduction
+.. |codacy| image:: https://app.codacy.com/project/badge/Grade/2e69c07714324a33a57d221deb4865d0
+    :target: https://www.codacy.com/gh/milescsmith/mass_cytometry_reduction/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=milescsmith/mass_cytometry_reduction&amp;utm_campaign=Badge_Grade
     :alt: Codacy Code Quality Status
 
 .. |commits-since| image:: https://img.shields.io/github/commits-since/milescsmith/mass_cytometry_reduction/v0.0.999.svg
