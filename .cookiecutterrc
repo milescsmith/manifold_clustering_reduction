@@ -1,0 +1,70 @@
+# This file exists so you can easily regenerate your project.
+#
+# `cookiepatcher` is a convenient shim around `cookiecutter`
+# for regenerating projects (it will generate a .cookiecutterrc
+# automatically for any template). To use it:
+#
+#    pip install cookiepatcher
+#    cookiepatcher gh:ionelmc/cookiecutter-pylibrary mass_cytometry_reduction
+#
+# See:
+#    https://pypi.org/project/cookiepatcher
+#
+# Alternatively, you can run:
+#
+#    cookiecutter --overwrite-if-exists --config-file=mass_cytometry_reduction/.cookiecutterrc gh:ionelmc/cookiecutter-pylibrary
+
+default_context:
+
+    _extensions:               ['jinja2_time.TimeExtension']
+    _template:                 'gh:ionelmc/cookiecutter-pylibrary'
+    allow_tests_inside_package: 'no'
+    appveyor:                  'no'
+    c_extension_function:      'longest'
+    c_extension_module:        '_mass_cytometry_reduction'
+    c_extension_optional:      'no'
+    c_extension_support:       'no'
+    c_extension_test_pypi:     'no'
+    c_extension_test_pypi_username: 'milescsmith'
+    codacy:                    'yes'
+    codacy_projectid:          '[Get ID from https://app.codacy.com/app/milescsmith/mass_cytometry_reduction/settings]'
+    codeclimate:               'no'
+    codecov:                   'yes'
+    command_line_interface:    'click'
+    command_line_interface_bin_name: 'mass-cytometry-umap'
+    coveralls:                 'yes'
+    coveralls_token:           '[Required for Appveyor, take it from https://coveralls.io/github/milescsmith/mass_cytometry_reduction]'
+    distribution_name:         'mass-cytometry-umap'
+    email:                     'miles-smith@omrf.org'
+    full_name:                 'Miles Smith'
+    legacy_python:             'no'
+    license:                   'GNU Lesser General Public License v3 or later (LGPLv3+)'
+    linter:                    'flake8'
+    package_name:              'mass_cytometry_reduction'
+    pre_commit:                'yes'
+    project_name:              'mass_cytometry_reduction'
+    project_short_description: 'Perform UMAP on mass cytometry data and visualize using Plotly Dash'
+    pypi_badge:                'no'
+    pypi_disable_upload:       'no'
+    release_date:              'today'
+    repo_hosting:              'github.com'
+    repo_hosting_domain:       'github.com'
+    repo_name:                 'mass_cytometry_reduction'
+    repo_username:             'milescsmith'
+    requiresio:                'no'
+    scrutinizer:               'no'
+    setup_py_uses_setuptools_scm: 'yes'
+    setup_py_uses_test_runner: 'yes'
+    sphinx_docs:               'yes'
+    sphinx_docs_hosting:       'https://mass_cytometry_reduction.readthedocs.io/'
+    sphinx_doctest:            'no'
+    sphinx_theme:              'sphinx-rtd-theme'
+    test_matrix_configurator:  'no'
+    test_matrix_separate_coverage: 'no'
+    test_runner:               'pytest'
+    travis:                    'no'
+    travis_osx:                'no'
+    version:                   '0.0.999'
+    website:                   'https://github.com/milescsmith'
+    year_from:                 '2021'
+    year_to:                   '2021'

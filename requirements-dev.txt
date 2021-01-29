@@ -1,0 +1,10 @@
+click>=7.0
+pandas~=1.3
+numpy
+umap-learn
+sklearn
+black
+flake8
+tox
+pytest
+pytest-cov
