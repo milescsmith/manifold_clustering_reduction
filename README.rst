@@ -39,7 +39,7 @@ Overview
 
 .. end-badges
 
-Perform UMAP on mass cytometry data and visualize using Plotly Dash
+Perform dimensional reduction and clustering on mass cytometry data and visualize using Plotly Dash
 
 * Free software: GNU Lesser General Public License v3 or later (LGPLv3+)
 
@@ -48,7 +48,7 @@ Installation
 
 ::
 
-    pip install mass-cytometry-umap
+    pip install mass-cytometry-reduction
 
 You can also install the in-development version with::
 
