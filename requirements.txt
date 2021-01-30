@@ -1,5 +1,6 @@
 click>=7.0
-pandas~=1.3
+leidenalg~=0.8
+pandas~=1.2
 numpy
 umap-learn
 sklearn
