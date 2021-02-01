@@ -1,6 +1,8 @@
 click>=7.0
+igraph
 leidenalg~=0.8
 pandas~=1.2
 numpy
-umap-learn
 sklearn
+scipy
+umap-learn

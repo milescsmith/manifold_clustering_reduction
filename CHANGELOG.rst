@@ -2,6 +2,12 @@
 Changelog
 =========
 
+0.1.999 (2021-01-31)
+--------------------
+
+* Add notebook with experiments figureing out leiden clustering
+* Add module with clustering functions.
+
 0.1.000 (2021-01-30)
 --------------------
 

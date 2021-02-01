@@ -1,9 +1,13 @@
 black
 click>=7.0
 flake8
+igraph
 leidenalg~=0.8
+matplotlib
 numpy
 pandas~=1.2
+scipy
+seaborn
 sklearn
 umap-learn
 pytest

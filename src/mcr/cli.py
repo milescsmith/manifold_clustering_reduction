@@ -14,11 +14,13 @@ Why does this file exist, and why not put this in __main__?
 
   Also see (1) from http://click.pocoo.org/5/setuptools/#setuptools-integration
 """
+
 from pathlib import Path
 from typing import Optional
 import logging
 import click
 import pandas as pd
+
 # import numpy as np
 from umap import UMAP
 from sklearn.manifold import TSNE  # replace this with Opt-SNE and/or openTSNE
@@ -52,7 +54,6 @@ def setup_logging(name: Optional[str] = None):
 @click.group()
 def main():
     setup_logging("mcr")
-    pass
 
 
 def read_data(filename: str) -> Optional[pd.DataFrame]:
@@ -112,8 +113,8 @@ def perform_reducion(
 @click.option(
     "--reduction",
     hep=(
-      "Type of dimensional reduction to perform.  "
-      "Choices include 'UMAP', 'Parametric UMAP (pumap)', and 'tSNE'"
+        "Type of dimensional reduction to perform.  "
+        "Choices include 'UMAP', 'Parametric UMAP (pumap)', and 'tSNE'"
     ),
     type=click.Choice(["umap", "pumap", "tsne"]),
     default="umap",
@@ -123,8 +124,8 @@ def perform_reducion(
 @click.option(
     "--cluster",
     help=(
-      "Perform clustering on the data in addition to "
-      "running the chosen dimensional reduction"
+        "Perform clustering on the data in addition to "
+        "running the chosen dimensional reduction"
     ),
     type=bool,
     default=False,
@@ -134,15 +135,15 @@ def perform_reducion(
 @click.option(
     "--ignore_columns",
     help=(
-      "A list of columns (seperated by commas) in the `data_file` to "
-      "ignore.  Generally stuff like cell name or size or anything that "
-      "might be irrelvant"
+        "A list of columns (seperated by commas) in the `data_file` to "
+        "ignore.  Generally stuff like cell name or size or anything that "
+        "might be irrelvant"
     ),
     type=str,
     default=(
-      "Object Id,XMin,XMax,YMin,YMax,Cell Area (µm²),Cytoplasm Area (µm²),"
-      "Membrane Area (µm²),Nucleus Area (µm²),Nucleus Perimeter (µm),"
-      "Nucleus Roundness"
+        "Object Id,XMin,XMax,YMin,YMax,Cell Area (µm²),Cytoplasm Area (µm²),"
+        "Membrane Area (µm²),Nucleus Area (µm²),Nucleus Perimeter (µm),"
+        "Nucleus Roundness"
     ),
     show_default=True,
     required=False,
@@ -163,7 +164,6 @@ def reduce_data(
     ignore_columns: Optional[str] = None,
 ):
     """Perform dimensional reduction on mass cytometry data"""
-
     df = read_data(data_file)
 
     if ignore_columns:
