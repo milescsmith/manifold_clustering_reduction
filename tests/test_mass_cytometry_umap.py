@@ -1,6 +1,6 @@
 from click.testing import CliRunner
 
-from mass_cytometry_reduction.cli import main
+from mcr.cli import main
 
 
 def test_main():

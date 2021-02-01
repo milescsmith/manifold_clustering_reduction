@@ -20,6 +20,7 @@ from typing import Optional
 import logging
 import click
 import pandas as pd
+from copy import deepcopy
 
 # import numpy as np
 from umap import UMAP
@@ -167,7 +168,7 @@ def reduce_data(
     df = read_data(data_file)
 
     if ignore_columns:
-        original_df = df
+        original_df = deepcopy(df)
         df = df.loc[:, ~df.columns.isin(ignore_columns.split(","))]
     else:
         original_df = df

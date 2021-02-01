@@ -10,8 +10,9 @@ from typing import Optional, Any, Dict
 
 # taken from scanpy._utils
 def get_igraph_from_adjacency(adjacency, directed=None):
-    """Get igraph graph from adjacency matrix."""
-
+    """\
+    Get igraph graph from adjacency matrix.
+    """
     sources, targets = adjacency.nonzero()
     weights = adjacency[sources, targets]
     if isinstance(weights, np.matrix):
@@ -19,10 +20,8 @@ def get_igraph_from_adjacency(adjacency, directed=None):
     g = ig.Graph(directed=directed)
     g.add_vertices(adjacency.shape[0])  # this adds adjacency.shape[0] vertices
     g.add_edges(list(zip(sources, targets)))
-    try:
-        g.es["weight"] = weights
-    except:
-        pass
+    g.es["weight"] = weights
+
     if g.vcount() != adjacency.shape[0]:
         logging.warning(
             f"The constructed graph has only {g.vcount()} nodes. "
@@ -33,16 +32,16 @@ def get_igraph_from_adjacency(adjacency, directed=None):
 
 def label_clusters(
     data_df: pd.DataFrame,
-    resolution: int = 1.0,
+    resolution: float = 1.0,
     partition_type: la.VertexPartition.MutableVertexPartition = la.RBConfigurationVertexPartition,
     n_neighbors: int = 30,
     random_state: Optional[int] = None,
     neighbor_metric: str = "euclidean",
-    neighbor_kwds: Optional[Dict[str, Any]] = {},
+    neighbor_kwds: Optional[Dict[str, Any]] = None,
     neighbor_angular: bool = False,
     neighbor_verbose: bool = True,
     fuzzy_metric: str = "euclidean",
-    fuzzy_metric_kwds: Optional[Dict[str, Any]] = {},
+    fuzzy_metric_kwds: Optional[Dict[str, Any]] = None,
     directed_graph: bool = False,
 ) -> np.array:
     """\
@@ -51,12 +50,12 @@ def label_clusters(
 
     Parameters
     ----------
-    data_df: 
+    data_df:
         :class:`pandas.DataFrame`
     resolution
-        int 
+        int
         default = 1.0
-    partition_type: 
+    partition_type:
         :class:`leidenalg.VertexPartition.MutableVertexPartition`
         default = la.RBConfigurationVertexPartition
     n_neighbors
@@ -65,12 +64,12 @@ def label_clusters(
     random_state
         Optional[int]
         default = None
-    neighbor_metric: 
-        str 
+    neighbor_metric:
+        str
         default = "euclidean"
-    neighbor_kwds: 
-        Optional[Dict[str, Any]] 
-        default = {}
+    neighbor_kwds:
+        Optional[Dict[str, Any]]
+        default = None
     neighbor_angular:
         bool
         default = False
@@ -82,7 +81,7 @@ def label_clusters(
         default = "euclidean"
     fuzzy_metric_kwds
         Optional[Dict[str, Any]]
-        default = {}
+        default = None
     directed_graph
         bool
         default = False
@@ -92,7 +91,7 @@ def label_clusters(
     np.array of cluster identities
     """
 
-    knn_indices, knn_distances, forest = umap.umap_.nearest_neighbors(
+    knn_indices, knn_distances, *_ = umap.umap_.nearest_neighbors(
         X=data_df,
         n_neighbors=n_neighbors,
         random_state=random_state,
@@ -102,7 +101,7 @@ def label_clusters(
         verbose=neighbor_verbose,
     )
 
-    connectivities, sigmas, rhos, dists = umap.umap_.fuzzy_simplicial_set(
+    connectivities, *_ = umap.umap_.fuzzy_simplicial_set(
         X=scipy.sparse.coo_matrix(([], ([], [])), shape=(data_df.shape[0], 1)),
         n_neighbors=n_neighbors,
         random_state=random_state,
