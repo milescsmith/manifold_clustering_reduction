@@ -1,5 +1,5 @@
 click>=7.0
-igraph
+python-igraph
 leidenalg~=0.8
 pandas~=1.2
 numpy

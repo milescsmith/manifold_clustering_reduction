@@ -1,11 +1,13 @@
-import umap
-import numpy as np
-import igraph as ig
 import logging
+from typing import Any
+from typing import Dict
+from typing import Optional
+
+import igraph as ig
 import leidenalg as la
-import scipy
+import numpy as np
 import pandas as pd
-from typing import Optional, Any, Dict
+import scipy
 
 
 # taken from scanpy._utils
@@ -90,8 +92,10 @@ def label_clusters(
     -------
     np.array of cluster identities
     """
+    from umap.umap_ import fuzzy_simplicial_set
+    from umap.umap_ import nearest_neighbors
 
-    knn_indices, knn_distances, *_ = umap.umap_.nearest_neighbors(
+    knn_indices, knn_distances, *_ = nearest_neighbors(
         X=data_df,
         n_neighbors=n_neighbors,
         random_state=random_state,
@@ -101,7 +105,7 @@ def label_clusters(
         verbose=neighbor_verbose,
     )
 
-    connectivities, *_ = umap.umap_.fuzzy_simplicial_set(
+    connectivities, *_ = fuzzy_simplicial_set(
         X=scipy.sparse.coo_matrix(([], ([], [])), shape=(data_df.shape[0], 1)),
         n_neighbors=n_neighbors,
         random_state=random_state,

@@ -4,7 +4,6 @@ from __future__ import unicode_literals
 import os
 import traceback
 
-
 extensions = [
     "sphinx.ext.autodoc",
     "sphinx.ext.autosummary",

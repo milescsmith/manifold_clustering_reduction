@@ -15,18 +15,17 @@ Why does this file exist, and why not put this in __main__?
   Also see (1) from http://click.pocoo.org/5/setuptools/#setuptools-integration
 """
 
+import logging
+from copy import deepcopy
 from pathlib import Path
 from typing import Optional
-import logging
+
 import click
+import numpy as np
 import pandas as pd
-from copy import deepcopy
 
-# import numpy as np
-from umap import UMAP
-from sklearn.manifold import TSNE  # replace this with Opt-SNE and/or openTSNE
-
-# add forceatlas2? PaCMAP? Somehow work in PAGA?
+from .clustering import label_clusters
+from .reduction import perform_reducion
 
 
 def setup_logging(name: Optional[str] = None):
@@ -52,11 +51,6 @@ def setup_logging(name: Optional[str] = None):
     logger.addHandler(st)
 
 
-@click.group()
-def main():
-    setup_logging("mcr")
-
-
 def read_data(filename: str) -> Optional[pd.DataFrame]:
     """
     Read in csv or excel file containing data.
@@ -69,8 +63,8 @@ def read_data(filename: str) -> Optional[pd.DataFrame]:
 
     if datafile.suffix in [".xlsx", ".xls"]:
         df = pd.read_excel(datafile)
-    elif datafile.suffix == ".csv":
-        df = pd.read_csv(datafile)
+    elif datafile.suffix in [".csv", ".tsv", ".txt"]:
+        df = pd.read_csv(datafile, engine="python")
     else:
         logging.error(
             "That file type is unknown.  Please provide a CSV, XLSX, or XLS file to use."
@@ -80,26 +74,9 @@ def read_data(filename: str) -> Optional[pd.DataFrame]:
     return df
 
 
-def perform_reducion(
-    df: pd.DataFrame,
-    reduction: str = "umap",
-) -> pd.DataFrame:
-
-    if reduction == "umap":
-        embeddings = UMAP().fit_transform(df)
-        embeddings_df = pd.DataFrame(embeddings).rename(
-            columns={0: "umap_1", 1: "umap_2"}
-        )
-    elif reduction == "tsne":
-        embeddings = TSNE().fit_transform(df)
-        embeddings_df = pd.DataFrame(embeddings).rename(
-            columns={0: "tsne_1", 1: "tsne_2"}
-        )
-    else:
-        logging.error("That is not a recognized dimensional reduction algorithm")
-        raise Exception
-
-    return embeddings_df
+@click.group()
+def main():
+    setup_logging("mcr")
 
 
 @main.command()
@@ -113,25 +90,15 @@ def perform_reducion(
 )
 @click.option(
     "--reduction",
-    hep=(
+    help=(
         "Type of dimensional reduction to perform.  "
-        "Choices include 'UMAP', 'Parametric UMAP (pumap)', and 'tSNE'"
+        "Choices include 'UMAP', 'Parametric UMAP (pumap)', 'tSNE' (using the "
+        "scikit-learn implementation), 'opt-SNE', or 'open-TSNE"
     ),
-    type=click.Choice(["umap", "pumap", "tsne"]),
+    type=click.Choice(["umap", "pumap", "tsne", "pacmap", "openTSNE", "optsne"]),
     default="umap",
     show_default=True,
     required=False,
-)
-@click.option(
-    "--cluster",
-    help=(
-        "Perform clustering on the data in addition to "
-        "running the chosen dimensional reduction"
-    ),
-    type=bool,
-    default=False,
-    show_default=True,
-    is_flag=True,
 )
 @click.option(
     "--ignore_columns",
@@ -161,21 +128,143 @@ def reduce_data(
     data_file: str,
     output: str,
     reduction: str = "umap",
-    cluster: bool = False,
     ignore_columns: Optional[str] = None,
-):
-    """Perform dimensional reduction on mass cytometry data"""
-    df = read_data(data_file)
+    add_to_source: bool = False,
+    **kwargs,
+) -> None:
+    """Perform dimensional reduction on mass cytometry data
+    \f
+    Parameters
+    ----------
+    \f
+    Returns
+    -------
+    """
+    df: pd.DataFrame = read_data(data_file)
 
+    original_df: pd.DataFrame = deepcopy(df)
     if ignore_columns:
-        original_df = deepcopy(df)
         df = df.loc[:, ~df.columns.isin(ignore_columns.split(","))]
+
+    processed_data = perform_reducion(df, reduction, **kwargs)
+
+    if add_to_source:
+        combined_data = pd.concat(
+            [original_df.reset_index(drop=True), processed_data], axis=1
+        )
+        combined_data.to_csv(output)
     else:
-        original_df = df
+        processed_data.to_csv(output)
 
-    processed_data = perform_reducion(df, reduction)
 
-    combined_data = pd.concat(
-        [original_df.reset_index(drop=True), processed_data], axis=1
-    )
-    combined_data.to_csv(output)
+@main.command()
+@click.option(
+    "--data_file",
+    help="File containing antigen expression",
+    type=str,
+    default=None,
+    show_default=True,
+    required=True,
+)
+@click.option(
+    "--output",
+    help="Filename to write results to",
+    type=str,
+    default="output.csv",
+    show_default=True,
+    required=False,
+)
+@click.option(
+    "--cluster_name",
+    help="Name to use for cluster column added to data file",
+    type=str,
+    default=None,
+    show_default=False,
+    required=False,
+)
+@click.option(
+    "--ignore_columns",
+    help=(
+        "A list of columns (seperated by commas) in the `data_file` to "
+        "ignore.  Generally stuff like cell name or size or anything that "
+        "might be irrelvant"
+    ),
+    type=str,
+    default=(
+        "Object Id,XMin,XMax,YMin,YMax,Cell Area (µm²),Cytoplasm Area (µm²),"
+        "Membrane Area (µm²),Nucleus Area (µm²),Nucleus Perimeter (µm),"
+        "Nucleus Roundness"
+    ),
+    show_default=True,
+    required=False,
+)
+@click.option(
+    "--add_to_source",
+    help=(
+        "If true, cluster identities are added as a column to the original data;"
+        "if false, clustering identities alone are saved."
+    ),
+    type=bool,
+    default=True,
+    show_default=True,
+    required=False,
+)
+def cluster_cells(
+    data_file: str,
+    output: str,
+    cluster_name: Optional[str] = None,
+    resolution: float = 0.6,
+    ignore_columns: Optional[str] = None,
+    add_to_source: bool = False,
+    **kwargs,
+) -> None:
+    """Identify clusters in mass cytometry data
+    \f
+    Parameters
+    ----------
+    data_file : `str`
+        A delimited or Excel spreadsheet containing data to analyze.
+        Must be in the format where cells are in rows and analytes are in columns.
+    output : `str`
+        File to write results to
+    cluster_name : `str`, optional (default: `res_X`, where `X` is the resolution)
+        Name to give column where the cluster identities are written
+    resolution : `float` (default: `0.6`)
+        Sensitivity at which to search for clusters.  Lower numbers result in few clusters,
+        while a higher number yields many clusters, though at some point ever cell becomes
+        its own clusters.Typically between 0.2 and 2.
+    ignore_columns : `str` (default: `"Object Id,XMin,XMax,YMin,YMax,Cell Area (µm²),Cytoplasm Area (µm²),"
+        "Membrane Area (µm²),Nucleus Area (µm²),Nucleus Perimeter (µm),"
+        "Nucleus Roundness"1)
+        A list of columns in the `data_file` to ignore when performing clustering.  For instance,
+        "Object Id", or "Cell Area".
+    add_to_source : `bool`, (default: `False`)
+        Return the cluster information added as a new column in the original table.
+    **kwargs :
+        Additional arguments to pass to the :func:`~nearest_neighbors` or
+        :func:`~fuzzy_simplicial_set` functions.
+
+    \f
+    Returns
+    -------
+    `None`
+        If `add_to_source` is false, writes results to a single column CSV;
+        if `add_to_source` is true, writes results to a new column appened to
+        the input dataframe.
+    """
+    df: pd.DataFrame = read_data(data_file)
+
+    if not cluster_name:
+        cluster_name = f"res_{resolution}"
+
+    original_df: pd.DataFrame = deepcopy(df)
+    if ignore_columns:
+        df = df.loc[:, ~df.columns.isin(ignore_columns.split(","))]
+
+    clusters = label_clusters(data_df=df, resolution=resolution, **kwargs)
+
+    if add_to_source:
+        original_df[cluster_name] = clusters
+        original_df.to_csv(output, index=False)
+    else:
+        np.savetxt(fname=output, X=clusters.astype(int), fmt="%i")

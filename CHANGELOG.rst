@@ -2,6 +2,25 @@
 Changelog
 =========
 
+0.3.000 (2021-02-03)
+--------------------
+
+Added:
+......
+
+* Added a rudimentary GUI interface using Plotly Dash.  For now, it can only
+    import data, run dimensional reduction on the data, and return the results.
+* Added handlers to perform reductions with opt-SNE, open-TSNE, and PaCMAP.
+
+0.2.000 (2021-02-02)
+-------------------
+
+Changed:
+........
+
+* Moved UMAP and other method imports into functions where they are used.
+    UMAP import, especially caused very slow overall startup
+
 0.1.999 (2021-01-31)
 --------------------
 

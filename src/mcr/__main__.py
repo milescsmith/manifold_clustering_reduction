@@ -9,7 +9,8 @@ Why does this file exist, and why __main__? For more info, read:
 - https://docs.python.org/3/using/cmdline.html#cmdoption-m
 """
 
-from mcr.cli import main, setup_logging
+from mcr.cli import main
+from mcr.cli import setup_logging
 
 if __name__ == "__main__":
     setup_logging(name="mcr")
