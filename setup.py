@@ -19,7 +19,7 @@ def read(*names, **kwargs):
 
 
 setup(
-    name="manifold-clustering-reduction",
+    name="manifold_clustering_reduction",
     use_scm_version={
         "local_scheme": "dirty-tag",
         "write_to": "src/mcr/_version.py",
@@ -87,7 +87,7 @@ setup(
         "openTSNE": ["opentsne~=0.5"],
         "pacmap": ["pacmap~=0.2"],
         "all_dr": [
-            "fa2",
+            # "fa2",
             "opentsne~=0.5",
             "pacmap~=0.2",
         ],
@@ -101,7 +101,7 @@ setup(
             "dash_html_components~=1.1",
         ],
         "all": [
-            "fa2",
+            # "fa2",
             "opentsne~=0.5",
             "pacmap~=0.2",
             "dash~=1.19",
