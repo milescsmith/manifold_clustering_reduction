@@ -6,3 +6,14 @@ numpy
 sklearn
 scipy
 umap-learn
+dash
+dash_bootstrap_components
+dash_core_components
+dash_daq
+dash_extensions
+dash_html_components
+dash_table
+plotly.express
+plotly.graph_objs
+dash.dependencies
+dash.exceptions

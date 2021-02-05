@@ -86,12 +86,10 @@ setup(
         "forceatlas2": ["fa2"],
         "openTSNE": ["opentsne~=0.5"],
         "pacmap": ["pacmap~=0.2"],
-        "optsne": ["git+https://github.com/omiq-ai/Multicore-opt-SNE"],
         "all_dr": [
             "fa2",
             "opentsne~=0.5",
             "pacmap~=0.2",
-            "git+https://github.com/omiq-ai/Multicore-opt-SNE",
         ],
         "dash": [
             "dash~=1.19",
@@ -106,7 +104,6 @@ setup(
             "fa2",
             "opentsne~=0.5",
             "pacmap~=0.2",
-            "git+https://github.com/omiq-ai/Multicore-opt-SNE",
             "dash~=1.19",
             "dash_table~=4.11",
             "dash_bootstrap_components~=0.11",
@@ -123,6 +120,7 @@ setup(
     entry_points={
         "console_scripts": [
             "mcr = mcr.cli:main",
+            "mcr-dash = mcr.dash_gui:main",
         ]
     },
 )

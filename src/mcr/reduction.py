@@ -27,15 +27,15 @@ def perform_reducion(
             logging.error(
                 "The openTSNE module is not available.  Please ensure it is installed"
             )
-    elif reduction == "optTSNE":
-        try:
-            from MulticoreTSNE import MulticoreTSNE
+    # elif reduction == "optTSNE":
+    #     try:
+    #         from MulticoreTSNE import MulticoreTSNE
 
-            embeddings = MulticoreTSNE(**kwargs).fit_transform(df)
-        except ImportError as error:
-            logging.error(
-                "The opt-SNE module is not available.  Please ensure it is installed"
-            )
+    #         embeddings = MulticoreTSNE(**kwargs).fit_transform(df)
+    #     except ImportError as error:
+    #         logging.error(
+    #             "The opt-SNE module is not available.  Please ensure it is installed"
+    #         )
     elif reduction == "pacmap":
         try:
             from pacmap import PaCMAP

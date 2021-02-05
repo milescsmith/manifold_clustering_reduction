@@ -95,6 +95,9 @@ def label_clusters(
     from umap.umap_ import fuzzy_simplicial_set
     from umap.umap_ import nearest_neighbors
 
+    logging.critical(
+        f"running nearest_neighbor().  Dataset is {data_df.shape[0]} by {data_df.shape[1]}."
+    )
     knn_indices, knn_distances, *_ = nearest_neighbors(
         X=data_df,
         n_neighbors=n_neighbors,
@@ -105,6 +108,7 @@ def label_clusters(
         verbose=neighbor_verbose,
     )
 
+    logging.critical("running fuzzy_simplicial_set()")
     connectivities, *_ = fuzzy_simplicial_set(
         X=scipy.sparse.coo_matrix(([], ([], [])), shape=(data_df.shape[0], 1)),
         n_neighbors=n_neighbors,
@@ -116,8 +120,10 @@ def label_clusters(
         return_dists=True,
     )
 
+    logging.critical("running get_igraph_from_adjacency()")
     g = get_igraph_from_adjacency(connectivities, directed=directed_graph)
 
+    logging.critical("running find_partition()")
     partition = la.find_partition(
         graph=g, partition_type=partition_type, resolution_parameter=resolution
     )

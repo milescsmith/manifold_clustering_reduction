@@ -8,12 +8,11 @@ Changelog
 Added:
 ......
 
-* Added a rudimentary GUI interface using Plotly Dash.  For now, it can only
-    import data, run dimensional reduction on the data, and return the results.
+* Added a GUI interface using Plotly Dash.
 * Added handlers to perform reductions with opt-SNE, open-TSNE, and PaCMAP.
 
 0.2.000 (2021-02-02)
--------------------
+--------------------
 
 Changed:
 ........
