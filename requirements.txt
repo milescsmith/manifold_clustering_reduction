@@ -13,7 +13,5 @@ dash_daq
 dash_extensions
 dash_html_components
 dash_table
-plotly.express
-plotly.graph_objs
-dash.dependencies
-dash.exceptions
+plotly_express==0.4.1
+plotly==4.14.3
