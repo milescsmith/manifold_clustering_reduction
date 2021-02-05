@@ -19,14 +19,14 @@ def read(*names, **kwargs):
 
 
 setup(
-    name="mass-cytometry-reduction",
+    name="manifold-clustering-reduction",
     use_scm_version={
         "local_scheme": "dirty-tag",
         "write_to": "src/mcr/_version.py",
         "fallback_version": "0.0.999",
     },
     license="LGPL-3.0-or-later",
-    description="Perform UMAP on mass cytometry data and visualize using Plotly Dash",
+    description="Perform dimensional reduction and clustering on moderately high dimensional data (i.e. mass cytometry), perform clustering, and visualize using Plotly Dash",
     long_description="%s\n%s"
     % (
         re.compile("^.. start-badges.*^.. end-badges", re.M | re.S).sub(
@@ -36,7 +36,7 @@ setup(
     ),
     author="Miles Smith",
     author_email="miles-smith@omrf.org",
-    url="https://github.com/milescsmith/mass_cytometry_reduction",
+    url="https://github.com/milescsmith/manifold_clustering_reduction",
     packages=find_packages("src"),
     package_dir={"mcr": "src/mcr"},
     py_modules=[Path(path).stem for path in glob("src/mcr/*.py")],
@@ -66,9 +66,9 @@ setup(
         "Topic :: Utilities",
     ],
     project_urls={
-        "Documentation": "https://mass_cytometry_reduction.readthedocs.io/",
-        "Changelog": "https://mass_cytometry_reduction.readthedocs.io/en/latest/changelog.html",
-        "Issue Tracker": "https://github.com/milescsmith/mass_cytometry_reduction/issues",
+        "Documentation": "https://manifold_clustering_reduction.readthedocs.io/",
+        "Changelog": "https://manifold_clustering_reduction.io/en/latest/changelog.html",
+        "Issue Tracker": "https://github.com/milescsmith/manifold_clustering_reduction/issues",
     },
     keywords=[
         "mass cytometry",
