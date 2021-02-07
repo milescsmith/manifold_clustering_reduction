@@ -23,7 +23,7 @@ def perform_reducion(
             from openTSNE import TSNE
 
             embeddings = TSNE(**kwargs).fit(df.values)
-        except ImportError as error:
+        except ImportError:
             logging.error(
                 "The openTSNE module is not available.  Please ensure it is installed"
             )
@@ -43,7 +43,7 @@ def perform_reducion(
             embeddings = PaCMAP(
                 n_dims=2, n_neighbors=None, MN_ratio=0.5, FP_ratio=2.0
             ).fit_transform(df.values)
-        except ImportError as error:
+        except ImportError:
             logging.error(
                 "The PaCMAP module is not available.  Please ensure it is installed"
             )

@@ -2,8 +2,16 @@
 Changelog
 =========
 
-0.3.1 (2021-02-04)
---------------------
+0.3.2 (2021-02-06)
+------------------
+
+Added:
+......
+
+* Loading indicators for upload of data, dimensional reduction, and clustering.
+
+0.3.1 (2021-02-05)
+------------------
 
 Added:
 ......

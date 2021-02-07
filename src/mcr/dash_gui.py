@@ -69,7 +69,11 @@ app.layout = html.Div(
                                 multiple=False,
                             ),
                             html.Hr(),
-                            html.Div(id="output-data-upload"),
+                            dcc.Loading(
+                                id="upload-data-loading",
+                                children=html.Div(id="output-data-upload"),
+                                type="default",
+                            ),
                         ]
                     ),
                 ),
@@ -121,6 +125,13 @@ app.layout = html.Div(
                                         id="reduce-submit",
                                         className="mr-2",
                                     ),
+                                    dcc.Loading(
+                                        id="reduce-loading",
+                                        type="default",
+                                        children=html.Div(
+                                            id="hidden-div", style={"display": "none"}
+                                        ),
+                                    ),
                                     html.Span(
                                         id="reduction-complete",
                                         style={"vertical-align": "middle"},
@@ -129,9 +140,6 @@ app.layout = html.Div(
                                         "Graph data",
                                         id="reduce-graph",
                                         className="mr-2",
-                                    ),
-                                    html.Div(
-                                        id="hidden-div", style={"display": "none"}
                                     ),
                                     html.Hr(),
                                     dbc.Button(
@@ -204,6 +212,14 @@ app.layout = html.Div(
                                             100: {"label": "100"},
                                         },
                                     ),
+                                    dcc.Loading(
+                                        id="cluster-loading",
+                                        type="default",
+                                        children=html.Div(
+                                            id="hidden-clustering-div",
+                                            style={"display": "none"},
+                                        ),
+                                    ),
                                     html.Hr(),
                                     daq.BooleanSwitch(
                                         id="reduce-append",
@@ -255,6 +271,7 @@ app.layout = html.Div(
                                     ),
                                     dcc.Graph(
                                         id="reduced-data-plot",
+                                        config={"responsive": False},
                                     ),
                                 ],
                             ),
@@ -310,12 +327,15 @@ def parse_contents(contents, filename):
         Output("reduce-columns", "options"),
         Output("color-store-import", "data"),
     ],
-    Input("upload-data", "contents"),
+    [
+        Input("upload-data", "contents"),
+    ],
     State("upload-data", "filename"),
 )
 def import_data(list_of_contents, list_of_names):
     if list_of_contents is None:
         logging.critical("contents are null")
+        return None, None, None
     if list_of_contents is not None:
         logging.critical(f"names: {list_of_names}, type: {type(list_of_names)}")
         children = parse_contents(list_of_contents, list_of_names)
@@ -323,6 +343,7 @@ def import_data(list_of_contents, list_of_names):
         return children[0], children[1], children[1]
     else:
         logging.error("Oh, damn, we fucked up.")
+        return None, None, None
 
 
 @app.callback(
@@ -477,7 +498,7 @@ def func(n_clicks, append_to_input=False):
             dbc.Modal(
                 [
                     dbc.ModalHeader("No data!"),
-                    dbc.ModalBody(f"There's no data to return!"),
+                    dbc.ModalBody("There's no data to return!"),
                     dbc.ModalFooter(
                         dbc.Button(
                             "Close",
@@ -505,8 +526,8 @@ def func(n_clicks, append_to_input=False):
 def update_reduction_graph(btn, color, colorscale):
     if btn is not None:
         if color is None:
-            fig = {
-                "data": [
+            fig = go.Figure(
+                data=[
                     go.Scattergl(
                         x=rd_df.iloc[:, 0],
                         y=rd_df.iloc[:, 1],
@@ -515,9 +536,8 @@ def update_reduction_graph(btn, color, colorscale):
                         marker=dict(colorscale="viridis"),
                     )
                 ],
-                "layout": go.Layout(height=750, width=900, autosize=False),
-                "config": {"responsive": True},
-            }
+                layout=go.Layout(height=750, width=900, autosize=False),
+            )
         else:
             logging.critical(f"{color} selected for color")
             if color in cytometry_df.columns:
@@ -526,16 +546,16 @@ def update_reduction_graph(btn, color, colorscale):
                 logging.critical(f"{color_data}")
             elif color in cluster_df.columns:
                 logging.critical(f"{color} is in cluster_df")
-                logging.critical(f"cluster_df.columns")
+                logging.critical("cluster_df.columns")
                 color_data = cluster_df[color]
                 logging.critical(f"{color_data}")
             else:
                 color_data = None
 
-            logging.critical(f"updating plot")
+            logging.critical("updating plot")
             logging.critical(f"colorscale is {colorscale}")
-            fig = {
-                "data": [
+            fig = go.Figure(
+                data=[
                     go.Scattergl(
                         x=rd_df.iloc[:, 0],
                         y=rd_df.iloc[:, 1],
@@ -546,37 +566,29 @@ def update_reduction_graph(btn, color, colorscale):
                         ),
                     )
                 ],
-                "layout": go.Layout(height=750, width=900, autosize=False),
-                "config": {"responsive": True},
-            }
+                layout=go.Layout(height=750, width=900, autosize=False),
+            )
     else:
-        fig = {
-            "data": [{"x": None, "y": None, "type": "scattergl"}],
-            "layout": {
-                "height": 750,
-                "width": 900,
-                "autosize": False,
-            },
-            "config": {"responsive": True},
-        }
-        fig = {
-            "data": [
+        fig = go.Figure(
+            data=[
                 go.Scattergl(
                     x=None,
                     y=None,
                     type="scattergl",
                 )
             ],
-            "layout": go.Layout(height=750, width=900, autosize=False),
-            "config": {"responsive": True},
-        }
+            layout=go.Layout(height=750, width=900, autosize=False),
+        )
 
     logging.critical("returning updated graph")
     return fig
 
 
 @app.callback(
-    Output("color-store-cluster", "data"),
+    [
+        Output("color-store-cluster", "data"),
+        Output("hidden-clustering-div", "children"),
+    ],
     [
         Input("cluster-data-btn", "n_clicks"),
         Input("cluster-resolution-sldr", "value"),
@@ -598,7 +610,7 @@ def cluster_data(
     if btn is not None:
         if cytometry_df is not None:
             data_use = cytometry_df.loc[:, ~cytometry_df.columns.isin(ignore_columns)]
-            logging.critical(f"performing clustering")
+            logging.critical("performing clustering")
             logging.critical(
                 f"data was originally {cytometry_df.shape[0]} by {cytometry_df.shape[1]}"
             )
@@ -616,19 +628,22 @@ def cluster_data(
                 cluster_df = pd.DataFrame(
                     {f"res_{res}_neighbors_{n_neighbors}": clusters}
                 )
-            return [
-                {
-                    "label": f"Cluster res_{res}_neighbors_{n_neighbors}",
-                    "value": f"res_{res}_neighbors_{n_neighbors}",
-                }
-            ]
+            return (
+                [
+                    {
+                        "label": f"Cluster res_{res}_neighbors_{n_neighbors}",
+                        "value": f"res_{res}_neighbors_{n_neighbors}",
+                    }
+                ],
+                True,
+            )
 
         else:
             dbc.Modal(
                 [
                     dbc.ModalHeader("No data!"),
                     dbc.ModalBody(
-                        f"Please load cytometry data before attempting to perform clustering."
+                        "Please load cytometry data before attempting to perform clustering."
                     ),
                     dbc.ModalFooter(
                         dbc.Button("Close", id="close", className="ml-auto")
@@ -636,9 +651,9 @@ def cluster_data(
                 ],
                 id="modal",
             )
-            return None
+            return None, True
     else:
-        return None
+        return None, True
 
 
 @click.command(
@@ -653,14 +668,14 @@ def cluster_data(
     required=False,
     is_flag=True,
 )
-def main(debug):
+def main(debug=False):
     """Run a Dash-based interface for performing
     dimensional reduction and clustering of data.
     """
     if debug:
-        app.run_server(debug=False, dev_tools_ui=True, dev_tools_props_check=False)
+        app.run_server(debug=True, dev_tools_ui=True, dev_tools_props_check=True)
     else:
-        app.run_server(debug=False, dev_tools_ui=True, dev_tools_props_check=False)
+        app.run_server(debug=False, dev_tools_ui=False, dev_tools_props_check=False)
 
 
 if __name__ == "__main__":

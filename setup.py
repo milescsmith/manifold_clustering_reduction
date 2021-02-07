@@ -26,7 +26,11 @@ setup(
         "fallback_version": "0.0.999",
     },
     license="LGPL-3.0-or-later",
-    description="Perform dimensional reduction and clustering on moderately high dimensional data (i.e. mass cytometry), perform clustering, and visualize using Plotly Dash",
+    description=(
+        "Perform dimensional reduction and clustering on moderately high "
+        "dimensional data (i.e. mass cytometry), perform clustering, and "
+        "visualize using Plotly Dash"
+    ),
     long_description="%s\n%s"
     % (
         re.compile("^.. start-badges.*^.. end-badges", re.M | re.S).sub(
@@ -120,7 +124,7 @@ setup(
     entry_points={
         "console_scripts": [
             "mcr = mcr.cli:main",
-            "mcr-dash = mcr.dash_gui:main",
+            "mcr-dash = mcr.dash_gui:main [dash, all]",
         ]
     },
 )
