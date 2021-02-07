@@ -1,5 +1,4 @@
 black
-cairocffi
 click>=7.0
 cmake
 fastparquet
@@ -10,13 +9,11 @@ python-igraph
 isort
 leidenalg~=0.8
 matplotlib
-networkx
 numpy
 pandas~=1.2
 scipy
 seaborn
 sklearn
-snappy
 tensorflow
 umap-learn
 pytest

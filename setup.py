@@ -7,8 +7,7 @@ from glob import glob
 from os.path import join
 from pathlib import Path
 
-from setuptools import find_packages
-from setuptools import setup
+from setuptools import find_packages, setup
 
 
 def read(*names, **kwargs):
@@ -30,7 +29,7 @@ setup(
         "Perform dimensional reduction and clustering on moderately high "
         "dimensional data (i.e. mass cytometry), perform clustering, and "
         "visualize using Plotly Dash"
-    ),
+        ),
     long_description="%s\n%s"
     % (
         re.compile("^.. start-badges.*^.. end-badges", re.M | re.S).sub(
