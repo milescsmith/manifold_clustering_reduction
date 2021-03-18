@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "manifold_clustering_reduction"
+name = "mcr"
 version = "0.3.2"
 description = "Perform dimensional reduction and clustering on moderately high dimensional data (i.e. mass cytometry), perform clustering, and visualize using Plotly Dash"
 authors = ["Miles Smith <miles-smith@omrf.org>"]
