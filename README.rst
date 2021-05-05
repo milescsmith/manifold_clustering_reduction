@@ -48,11 +48,7 @@ Installation
 
 ::
 
-    pip install mass-cytometry-reduction
-
-You can also install the in-development version with::
-
-    pip install https://github.com/milescsmith/mass_cytometry_reduction/archive/master.zip
+    pip install git+https://github.com/milescsmith/mass-cytometry-reduction
 
 
 Documentation
