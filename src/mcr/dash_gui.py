@@ -1,12 +1,10 @@
+from typing import Dict, List, Optional, Tuple
+
 import base64
 import io
 import logging
 from pathlib import Path
 from tempfile import TemporaryDirectory
-from typing import Dict
-from typing import List
-from typing import Optional
-from typing import Tuple
 
 import click
 import dash
@@ -18,16 +16,13 @@ import dash_html_components as html
 import dash_table
 import numpy as np
 import pandas as pd
-from plotly.express.colors import named_colorscales
 import plotly.graph_objs as go
-from dash.dependencies import Input
-from dash.dependencies import Output
-from dash.dependencies import State
+from dash.dependencies import Input, Output, State
 from dash.exceptions import PreventUpdate
 from dash_extensions.snippets import send_file
-
 from mcr.clustering import label_clusters
 from mcr.reduction import perform_reducion
+from plotly.express.colors import named_colorscales
 
 external_stylesheets = ["https://codepen.io/chriddyp/pen/bWLwgP.css"]
 colorscales = named_colorscales()

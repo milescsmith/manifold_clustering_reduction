@@ -15,10 +15,11 @@ Why does this file exist, and why not put this in __main__?
   Also see (1) from http://click.pocoo.org/5/setuptools/#setuptools-integration
 """
 
+from typing import Optional
+
 import logging
 from copy import deepcopy
 from pathlib import Path
-from typing import Optional
 
 import click
 import numpy as np

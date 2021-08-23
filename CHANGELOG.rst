@@ -2,6 +2,14 @@
 Changelog
 =========
 
+0.3.3 (2021-02-07)
+------------------
+
+Added:
+......
+
+* Add `Poetry <https://python-poetry.org/>`_ as a dependency resolver
+
 0.3.2 (2021-02-06)
 ------------------
 

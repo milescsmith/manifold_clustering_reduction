@@ -1,7 +1,6 @@
+from typing import Any, Dict, Optional
+
 import logging
-from typing import Any
-from typing import Dict
-from typing import Optional
 
 import igraph as ig
 import leidenalg as la
@@ -92,8 +91,7 @@ def label_clusters(
     -------
     np.array of cluster identities
     """
-    from umap.umap_ import fuzzy_simplicial_set
-    from umap.umap_ import nearest_neighbors
+    from umap.umap_ import fuzzy_simplicial_set, nearest_neighbors
 
     logging.critical(
         f"running nearest_neighbor().  Dataset is {data_df.shape[0]} by {data_df.shape[1]}."
