@@ -16,15 +16,15 @@ packages = [ { include = "src/mcr/*.py" } ]
 "Bug tracker" = "https://github.com/milescsmith/manifold_clustering_reduction/issues"
 
 [tool.poetry.dependencies]
-python = "^3.8"
+python = ">=3.8,<3.11"
 click = "^7.1.2"
-python-igraph = "^0.8.3"
-leidenalg = "^0.8.3"
+python-igraph = "^0.9"
+leidenalg = "^0.8.8"
 pandas = "^1.2.1"
 numpy = "^1.19.0"
 sklearn = "^0.0"
 scipy = "^1.6.0"
-umap-learn = "^0.5.0"
+umap-learn = "^0.5.2"
 dash = { version = "^1.19", optional = true, extras = ["dash", "all"] }
 dash_table = { version = "^4.11", optional = true, extras = ["dash", "all"] }
 dash_bootstrap_components = { version = "^0.11", optional = true, extras = ["dash", "all"] }
@@ -40,7 +40,7 @@ cmake = "^3.18.4"
 fastparquet = "^0.5.0"
 flake8 = "^3.8.4"
 hdbscan = "^0.8.27"
-python-igraph = "^0.8.3"
+python-igraph = "^0.9"
 isort = "^5.7.0"
 leidenalg = "^0.8.3"
 matplotlib = "^3.3.4"
@@ -49,7 +49,6 @@ pandas = "^1.2.1"
 scipy = "^1.6.0"
 seaborn = "^0.11.1"
 sklearn = "^0.0"
-tensorflow = { version = "^2.4.1", optional = true }
 umap-learn = "^0.5.0"
 pytest = "^6.2.2"
 pytest-cov = "^2.11.1"
