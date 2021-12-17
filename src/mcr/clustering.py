@@ -15,7 +15,7 @@ except ImportError:
     class MutableVertexPartition:
         pass
 
-    MutableVertexPartition.__module__ = 'leidenalg.VertexPartition'
+    MutableVertexPartition.__module__ = "leidenalg.VertexPartition"
 
 
 # taken from scanpy._utils
@@ -55,7 +55,6 @@ def label_clusters(
     directed_graph: bool = False,
     use_weights: bool = True,
     n_iterations: int = -1,
-    
     **partition_kwargs,
 ) -> np.array:
     """\
@@ -105,9 +104,9 @@ def label_clusters(
     np.array of cluster identities
     """
     from umap.umap_ import fuzzy_simplicial_set, nearest_neighbors
-    
+
     partition_kwargs = dict(partition_kwargs)
-    
+
     logging.critical(
         f"running nearest_neighbor().  Dataset is {data_df.shape[0]} by {data_df.shape[1]}."
     )
@@ -137,17 +136,20 @@ def label_clusters(
     g = get_igraph_from_adjacency(connectivities, directed=directed_graph)
 
     logging.critical("running find_partition()")
-    
+
     if partition_type is None:
         partition_type = la.RBConfigurationVertexPartition
     if use_weights:
-        partition_kwargs['weights'] = np.array(g.es['weight']).astype(np.float64)
-    partition_kwargs['n_iterations'] = n_iterations
-    partition_kwargs['seed'] = 0
+        partition_kwargs["weights"] = np.array(g.es["weight"]).astype(
+            np.float64
+        )
+    partition_kwargs["n_iterations"] = n_iterations
+    partition_kwargs["seed"] = 0
     if resolution is not None:
-        partition_kwargs['resolution_parameter'] = resolution
-    
+        partition_kwargs["resolution_parameter"] = resolution
+
     partition = la.find_partition(
-        graph=g, partition_type=partition_type, **partition_kwargs)
+        graph=g, partition_type=partition_type, **partition_kwargs
+    )
 
     return np.array(partition.membership)

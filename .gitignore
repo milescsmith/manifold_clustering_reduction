@@ -80,3 +80,5 @@ src/*/_version.py
 *.npy
 *.parquet
 *.csv
+
+**/*.ipynb_checkpoints

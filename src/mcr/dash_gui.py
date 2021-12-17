@@ -48,7 +48,10 @@ app.layout = html.Div(
                             dcc.Upload(
                                 id="upload-data",
                                 children=html.Div(
-                                    ["Drag and Drop or ", html.A("Select Files")]
+                                    [
+                                        "Drag and Drop or ",
+                                        html.A("Select Files"),
+                                    ]
                                 ),
                                 style={
                                     "width": "100%",
@@ -85,21 +88,36 @@ app.layout = html.Div(
                             html.Div(
                                 className="four columns div-for-charts bg-grey",
                                 children=[
-                                    html.B("Choose dimensional reduction method:"),
+                                    html.B(
+                                        "Choose dimensional reduction method:"
+                                    ),
                                     dcc.Dropdown(
                                         id="reduce-alg",
                                         options=[
                                             {"label": "UMAP", "value": "umap"},
                                             {"label": "tSNE", "value": "tsne"},
-                                            {"label": "PaCMAP", "value": "pacmap"},
-                                            {"label": "openTSNE", "value": "opentsne"},
-                                            {"label": "optSNE", "value": "optsne"},
+                                            {
+                                                "label": "PaCMAP",
+                                                "value": "pacmap",
+                                            },
+                                            {
+                                                "label": "openTSNE",
+                                                "value": "opentsne",
+                                            },
+                                            {
+                                                "label": "optSNE",
+                                                "value": "optsne",
+                                            },
                                         ],
                                     ),
-                                    html.B("(Optional) Choose columns to ignore:"),
+                                    html.B(
+                                        "(Optional) Choose columns to ignore:"
+                                    ),
                                     dcc.Dropdown(
                                         id="reduce-columns",
-                                        options=[{"label": "None", "value": "None"}],
+                                        options=[
+                                            {"label": "None", "value": "None"}
+                                        ],
                                         value=[
                                             "Object Id",
                                             "XMin",
@@ -124,7 +142,8 @@ app.layout = html.Div(
                                         id="reduce-loading",
                                         type="default",
                                         children=html.Div(
-                                            id="hidden-div", style={"display": "none"}
+                                            id="hidden-div",
+                                            style={"display": "none"},
                                         ),
                                     ),
                                     html.Span(
@@ -252,7 +271,9 @@ app.layout = html.Div(
                                     ),
                                     dcc.Dropdown(
                                         id="reduced-data-color",
-                                        options=[{"label": "None", "value": "None"}],
+                                        options=[
+                                            {"label": "None", "value": "None"}
+                                        ],
                                         value=None,
                                         multi=False,
                                     ),
@@ -306,7 +327,9 @@ def parse_contents(contents, filename):
                 [
                     dash_table.DataTable(
                         data=cytometry_df.to_dict("records"),
-                        columns=[{"name": i, "id": i} for i in cytometry_df.columns],
+                        columns=[
+                            {"name": i, "id": i} for i in cytometry_df.columns
+                        ],
                     ),
                 ]
             ),
@@ -346,7 +369,9 @@ def import_data(list_of_contents, list_of_names):
     [Input("color-store-import", "data"), Input("color-store-cluster", "data")],
     State("reduced-data-color", "options"),
 )
-def update_graph_color_options(import_vars=None, cluster_vars=None, extant_vars=None):
+def update_graph_color_options(
+    import_vars=None, cluster_vars=None, extant_vars=None
+):
 
     if extant_vars is None:
         extant_vars = list()
@@ -384,7 +409,9 @@ def reduce_data(btn, alg, append, ignore_columns=None):
             logging.critical(f"performing {alg}")
             logging.critical(f"ignoring {ignore_columns}")
             df = perform_reducion(
-                cytometry_df.iloc[:, ~cytometry_df.columns.isin(ignore_columns)],
+                cytometry_df.iloc[
+                    :, ~cytometry_df.columns.isin(ignore_columns)
+                ],
                 reduction=alg,
             )
             logging.critical(f"finished {alg}")
@@ -394,7 +421,9 @@ def reduce_data(btn, alg, append, ignore_columns=None):
             else:
                 logging.critical("append was False")
                 rd_df = df
-            logging.critical(f"sanitiy check: {alg} data has {rd_df.shape[1]} columns")
+            logging.critical(
+                f"sanitiy check: {alg} data has {rd_df.shape[1]} columns"
+            )
             logging.critical("returning data")
             return html.Div(
                 [
@@ -557,7 +586,9 @@ def update_reduction_graph(btn, color, colorscale):
                         type="scattergl",
                         mode="markers",
                         marker=dict(
-                            colorscale=colorscale, color=color_data, showscale=True
+                            colorscale=colorscale,
+                            color=color_data,
+                            showscale=True,
                         ),
                     )
                 ],
@@ -604,7 +635,9 @@ def cluster_data(
     logging.critical(f"{n_neighbors}")
     if btn is not None:
         if cytometry_df is not None:
-            data_use = cytometry_df.loc[:, ~cytometry_df.columns.isin(ignore_columns)]
+            data_use = cytometry_df.loc[
+                :, ~cytometry_df.columns.isin(ignore_columns)
+            ]
             logging.critical("performing clustering")
             logging.critical(
                 f"data was originally {cytometry_df.shape[0]} by {cytometry_df.shape[1]}"
@@ -668,9 +701,13 @@ def main(debug=False):
     dimensional reduction and clustering of data.
     """
     if debug:
-        app.run_server(debug=True, dev_tools_ui=True, dev_tools_props_check=True)
+        app.run_server(
+            debug=True, dev_tools_ui=True, dev_tools_props_check=True
+        )
     else:
-        app.run_server(debug=False, dev_tools_ui=False, dev_tools_props_check=False)
+        app.run_server(
+            debug=False, dev_tools_ui=False, dev_tools_props_check=False
+        )
 
 
 if __name__ == "__main__":
