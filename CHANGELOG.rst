@@ -11,6 +11,13 @@ Added:
 * Add `Poetry <https://python-poetry.org/>`_ as a dependency resolver
 * Update dependencies
 
+Changed:
+........
+
+* Updated dependencies
+* Replaced python-igraph with igraph
+* Updated `mcr.clustering.label_clusters()` to work with newer versions of leidenalg and igraph
+
 0.3.2 (2021-02-06)
 ------------------
 

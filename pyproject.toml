@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "mcr"
-version = "0.3.3"
+version = "0.5.0"
 description = "Perform dimensional reduction and clustering on moderately high dimensional data (i.e. mass cytometry), perform clustering, and visualize using Plotly Dash"
 authors = ["Miles Smith <miles-smith@omrf.org>"]
 license = "LGPL-3.0-or-later"
@@ -10,21 +10,19 @@ homepage = "https://github.com/milescsmith/manifold_clustering_reduction"
 repository = "https://github.com/milescsmith/manifold_clustering_reduction"
 keywords = ["umap", "clustering", "visualization"]
 documentation = "https://manifold-clustering-reduction.readthedocs.io/en/latest/"
-packages = [ { include = "src/mcr/*.py" } ]
 
 [tool.poetry.urls]
 "Bug tracker" = "https://github.com/milescsmith/manifold_clustering_reduction/issues"
 
 [tool.poetry.dependencies]
-python = "^3.8"
-click = "^7.1.2"
-python-igraph = "^0.8.3"
-leidenalg = "^0.8.3"
+python = ">=3.8,<3.11"
+click = "^8.0"
+leidenalg = "^0.8.8"
 pandas = "^1.2.1"
-numpy = "^1.19.0"
+numpy = "^1.19.2"
 sklearn = "^0.0"
 scipy = "^1.6.0"
-umap-learn = "^0.5.0"
+umap-learn = "^0.5.2"
 dash = { version = "^1.19", optional = true, extras = ["dash", "all"] }
 dash_table = { version = "^4.11", optional = true, extras = ["dash", "all"] }
 dash_bootstrap_components = { version = "^0.11", optional = true, extras = ["dash", "all"] }
@@ -32,6 +30,10 @@ dash_core_components = { version = "^1.15", optional = true, extras = ["dash", "
 dash_daq = { version = "^0.5", optional = true, extras = ["dash", "all"] }
 dash_extensions = { version = "^0.0.4", optional = true, extras = ["dash", "all"] }
 dash_html_components = { version = "^1.1", optional = true, extras = ["dash", "all"] }
+igraph = "^0.9.8"
+hdbscan = "^0.8.27"
+matplotlib = "^3.3.4"
+seaborn = "^0.11.1"
 
 [tool.poetry.dev-dependencies]
 black = "^20.8b1"
@@ -64,7 +66,7 @@ dash = ["dash", "dash_table", "dash_bootstrap_components", "dash_core_components
 # https://github.com/psf/black
 line-length = 80
 target-version = ["py38"]
-exclude = "src/mcr/|.eggs|.git|.hg|.mypy_cache|.nox|.tox|.venv|.svn|_build|buck-out|build|dist)"
+exclude = "(.eggs|.git|.hg|.mypy_cache|.nox|.tox|.venv|.svn|_build|buck-out|build|dist)"
 
 [tool.isort]
 # https://github.com/timothycrosley/isort/
@@ -77,3 +79,22 @@ indent = 4
 force_grid_wrap = 0
 use_parentheses = true
 line_length = 80
+
+[tool.coverage.paths]
+source = ["src", "*/site-packages"]
+
+[tool.coverage.run]
+branch = true
+source = ["mcr"]
+
+[tool.coverage.report]
+show_missing = true
+fail_under = 100
+
+[tool.mypy]
+strict = true
+warn_unreachable = true
+pretty = true
+show_column_numbers = true
+show_error_codes = true
+show_error_context = true

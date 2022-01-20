@@ -96,7 +96,9 @@ def main():
         "Choices include 'UMAP', 'Parametric UMAP (pumap)', 'tSNE' (using the "
         "scikit-learn implementation), 'opt-SNE', or 'open-TSNE"
     ),
-    type=click.Choice(["umap", "pumap", "tsne", "pacmap", "openTSNE", "optsne"]),
+    type=click.Choice(
+        ["umap", "pumap", "tsne", "pacmap", "openTSNE", "optsne"]
+    ),
     default="umap",
     show_default=True,
     required=False,

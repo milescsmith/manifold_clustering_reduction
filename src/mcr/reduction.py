@@ -48,7 +48,9 @@ def perform_reducion(
                 "The PaCMAP module is not available.  Please ensure it is installed"
             )
     else:
-        logging.error("That is not a recognized dimensional reduction algorithm")
+        logging.error(
+            "That is not a recognized dimensional reduction algorithm"
+        )
         raise Exception
 
     return pd.DataFrame(embeddings).rename(

@@ -1,4 +1,4 @@
-from typing import Any, Dict, Optional
+from typing import Any, Dict, Optional, Type
 
 import logging
 
@@ -7,6 +7,15 @@ import leidenalg as la
 import numpy as np
 import pandas as pd
 import scipy
+
+try:
+    from leidenalg.VertexPartition import MutableVertexPartition
+except ImportError:
+
+    class MutableVertexPartition:
+        pass
+
+    MutableVertexPartition.__module__ = "leidenalg.VertexPartition"
 
 
 # taken from scanpy._utils
@@ -34,7 +43,7 @@ def get_igraph_from_adjacency(adjacency, directed=None):
 def label_clusters(
     data_df: pd.DataFrame,
     resolution: float = 1.0,
-    partition_type: la.VertexPartition.MutableVertexPartition = la.RBConfigurationVertexPartition,
+    partition_type: Optional[Type[MutableVertexPartition]] = None,
     n_neighbors: int = 30,
     random_state: Optional[int] = None,
     neighbor_metric: str = "euclidean",
@@ -44,6 +53,9 @@ def label_clusters(
     fuzzy_metric: str = "euclidean",
     fuzzy_metric_kwds: Optional[Dict[str, Any]] = None,
     directed_graph: bool = False,
+    use_weights: bool = True,
+    n_iterations: int = -1,
+    **partition_kwargs,
 ) -> np.array:
     """\
     Given a cell-by-analyte :class:`~pd.DataFrame`, assign cluster identities
@@ -93,6 +105,8 @@ def label_clusters(
     """
     from umap.umap_ import fuzzy_simplicial_set, nearest_neighbors
 
+    partition_kwargs = dict(partition_kwargs)
+
     logging.critical(
         f"running nearest_neighbor().  Dataset is {data_df.shape[0]} by {data_df.shape[1]}."
     )
@@ -122,8 +136,20 @@ def label_clusters(
     g = get_igraph_from_adjacency(connectivities, directed=directed_graph)
 
     logging.critical("running find_partition()")
+
+    if partition_type is None:
+        partition_type = la.RBConfigurationVertexPartition
+    if use_weights:
+        partition_kwargs["weights"] = np.array(g.es["weight"]).astype(
+            np.float64
+        )
+    partition_kwargs["n_iterations"] = n_iterations
+    partition_kwargs["seed"] = 0
+    if resolution is not None:
+        partition_kwargs["resolution_parameter"] = resolution
+
     partition = la.find_partition(
-        graph=g, partition_type=partition_type, resolution_parameter=resolution
+        graph=g, partition_type=partition_type, **partition_kwargs
     )
 
     return np.array(partition.membership)
