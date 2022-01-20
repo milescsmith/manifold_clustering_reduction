@@ -9,6 +9,7 @@ Added:
 ......
 
 * Add `Poetry <https://python-poetry.org/>`_ as a dependency resolver
+* Update dependencies
 
 0.3.2 (2021-02-06)
 ------------------
