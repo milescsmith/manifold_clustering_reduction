@@ -2,6 +2,21 @@
 Changelog
 =========
 
+0.6.0 (2022-03-23)
+
+Fixed:
+......
+
+* Fixed a problem where csvs were expected to be `UTF-8` encoded so that mcr-dash
+failed when uploading a csv encoded in `latin-1`/'iso-8859-1` failed
+
+Update:
+.......
+
+* Update required depenencies, including security fixes for `pillow`, a host of
+issues with `tensorflow`, and updates to the `dash` ecosystem.
+
+
 0.3.3 (2021-02-07)
 ------------------
 

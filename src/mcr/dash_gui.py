@@ -7,13 +7,10 @@ from pathlib import Path
 from tempfile import TemporaryDirectory
 
 import click
-import dash
+from dash import dcc, Dash, html, dash_table
 import dash_bootstrap_components as dbc
-import dash_core_components as dcc
 import dash_daq as daq
 import dash_extensions as dex
-import dash_html_components as html
-import dash_table
 import numpy as np
 import pandas as pd
 import plotly.graph_objs as go
@@ -32,7 +29,7 @@ rd_df = None
 cluster_df = None
 columns = []
 
-app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
+app = Dash(__name__, external_stylesheets=external_stylesheets)
 app.config.suppress_callback_exceptions = True
 app.layout = html.Div(
     children=[
@@ -197,7 +194,7 @@ app.layout = html.Div(
                                         },
                                     ),
                                     html.Div(
-                                        "N-nearist neighbors",
+                                        "N-nearest neighbors",
                                         id="hidden-div3",
                                         style={
                                             "width": "100%",
@@ -312,7 +309,10 @@ def parse_contents(contents, filename):
     try:
         if "csv" in filename:
             # Assume that the user uploaded a CSV file
-            cytometry_df = pd.read_csv(io.StringIO(decoded.decode("utf-8")))
+            try:
+                cytometry_df = pd.read_csv(io.StringIO(decoded.decode("utf-8")))
+            except UnicodeDecodeError:
+                cytometry_df = pd.read_csv(io.StringIO(decoded.decode("latin")))
             logging.critical(f"{cytometry_df.columns[0]}")
         elif "xls" in filename or "xlsx" in filename:
             # Assume that the user uploaded an excel file
