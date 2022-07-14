@@ -2,6 +2,18 @@
 Changelog
 =========
 
+0.7.0 (2022-07-14)
+
+Added:
+......
+
+* Dockerfile
+
+Update:
+.......
+
+* Update dependencies.
+
 0.6.0 (2022-03-23)
 
 Fixed:
@@ -13,7 +25,7 @@ failed when uploading a csv encoded in `latin-1`/'iso-8859-1` failed
 Update:
 .......
 
-* Update required depenencies, including security fixes for `pillow`, a host of
+* Update required dependencies, including security fixes for `pillow`, a host of
 issues with `tensorflow`, and updates to the `dash` ecosystem.
 
 

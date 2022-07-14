@@ -702,11 +702,11 @@ def main(debug=False):
     """
     if debug:
         app.run_server(
-            debug=True, dev_tools_ui=True, dev_tools_props_check=True
+            debug=True, dev_tools_ui=True, dev_tools_props_check=True, port=8787, threaded=True, host='0.0.0.0',
         )
     else:
         app.run_server(
-            debug=False, dev_tools_ui=False, dev_tools_props_check=False
+            debug=False, dev_tools_ui=False, dev_tools_props_check=False, port=8787, threaded=True, host='0.0.0.0',
         )
 
 
